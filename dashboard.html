@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | PARFUMES AMALL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f5f7;
+            color: #1a1a2e;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 200px;
+            flex-shrink: 0;
+            background: #fff;
+            border-right: 1px solid #e8e8e8;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+        }
+
+        .sidebar-logo {
+            padding: 22px 20px 18px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .sidebar-logo .brand {
+            font-weight: 900;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            color: #111;
+        }
+
+        .sidebar-logo .admin-badge {
+            background: #111;
+            color: #fff;
+            font-size: 0.55rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 20px;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all .2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            background: #f7f7fa;
+            color: #111;
+        }
+
+        .sidebar-nav a.active {
+            background: #f0f0f5;
+            color: #111;
+            border-left: 3px solid #111;
+            font-weight: 700;
+        }
+
+        .sidebar-nav a svg {
+            width: 17px;
+            height: 17px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        .sidebar-signout {
+            padding: 18px 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .sidebar-signout a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #e53e3e;
+            text-decoration: none;
+            font-size: 0.83rem;
+            font-weight: 600;
+        }
+
+        .sidebar-signout a svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ── MAIN ── */
+        .main-area {
+            margin-left: 200px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ── TOP BAR ── */
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            padding: 0 32px;
+            height: 62px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .search-wrap {
+            flex: 1;
+            max-width: 320px;
+            position: relative;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 9px 14px 9px 38px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.83rem;
+            background: #f7f8fa;
+            outline: none;
+            color: #333;
+        }
+
+        .search-wrap input:focus {
+            border-color: #aaa;
+            background: #fff;
+        }
+
+        .search-wrap svg {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 15px;
+            stroke: #aaa;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-left: auto;
+        }
+
+        .notif-btn {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+        }
+
+        .notif-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: #555;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #e53e3e;
+            color: #fff;
+            font-size: 0.6rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .admin-profile .info {
+            text-align: right;
+        }
+
+        .admin-profile .info .name {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .admin-profile .info .email {
+            font-size: 0.72rem;
+            color: #888;
+        }
+
+        .admin-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #111;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        /* ── NOTIFICATIONS DROPDOWN ── */
+        .notif-panel {
+            position: absolute;
+            top: 62px;
+            right: 20px;
+            width: 340px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .12);
+            z-index: 200;
+            display: none;
+        }
+
+        .notif-panel.open {
+            display: block;
+        }
+
+        .notif-header {
+            padding: 14px 18px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .notif-header h4 {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .notif-header span {
+            font-size: 0.73rem;
+            color: #888;
+        }
+
+        .notif-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #999;
+            line-height: 1;
+        }
+
+        .notif-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 18px;
+            border-bottom: 1px solid #f7f7f7;
+            position: relative;
+        }
+
+        .notif-item:last-of-type {
+            border-bottom: none;
+        }
+
+        .notif-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #eaf4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notif-dot svg {
+            width: 14px;
+            height: 14px;
+            stroke: #2196f3;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .notif-info .title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .notif-info .desc {
+            font-size: 0.75rem;
+            color: #777;
+            margin: 2px 0;
+        }
+
+        .notif-info .time {
+            font-size: 0.7rem;
+            color: #aaa;
+        }
+
+        .notif-remove {
+            position: absolute;
+            right: 14px;
+            top: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .notif-remove:hover {
+            color: #e53e3e;
+        }
+
+        .notif-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 18px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .notif-footer button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: .5px;
+        }
+
+        .btn-refresh {
+            color: #555;
+        }
+
+        .btn-clearall {
+            color: #e53e3e;
+        }
+
+        /* ── PAGE CONTENT ── */
+        .page-content {
+            padding: 36px 40px;
+            flex: 1;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Orders section */
+        .page-heading {
+            margin-bottom: 6px;
+        }
+
+        .page-heading h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #111;
+        }
+
+        .page-heading p {
+            font-size: 0.78rem;
+            color: #888;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .orders-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 24px 0 18px;
+        }
+
+        .orders-search {
+            position: relative;
+            max-width: 380px;
+            flex: 1;
+        }
+
+        .orders-search input {
+            width: 100%;
+            padding: 10px 14px 10px 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.84rem;
+            background: #fff;
+            outline: none;
+            color: #333;
+        }
+
+        .orders-search input:focus {
+            border-color: #aaa;
+        }
+
+        .orders-search svg {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 15px;
+            stroke: #aaa;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        .refresh-btn {
+            background: none;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 9px 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: #555;
+        }
+
+        .refresh-btn svg {
+            width: 15px;
+            height: 15px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .filter-row select {
+            padding: 7px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 7px;
+            font-size: 0.8rem;
+            color: #444;
+            background: #fff;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .orders-table-wrap {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e8e8e8;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            padding: 12px 18px;
+            text-align: left;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #aaa;
+            background: #fafafa;
+            border-bottom: 1px solid #efefef;
+            font-weight: 600;
+        }
+
+        tbody td {
+            padding: 14px 18px;
+            font-size: 0.85rem;
+            color: #333;
+            border-bottom: 1px solid #f5f5f5;
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover td {
+            background: #fafbff;
+        }
+
+        .order-id {
+            font-weight: 700;
+            color: #111;
+            font-size: 0.82rem;
+        }
+
+        .order-date {
+            font-size: 0.73rem;
+            color: #aaa;
+            margin-top: 2px;
+        }
+
+        .customer-name {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #111;
+        }
+
+        .customer-phone {
+            font-size: 0.73rem;
+            color: #aaa;
+            margin-top: 2px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.73rem;
+            font-weight: 700;
+            padding: 4px 11px;
+            border-radius: 20px;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+        }
+
+        .status-badge.delivered {
+            background: #e6f9f0;
+            color: #1a9e5a;
+        }
+
+        .status-badge.processing {
+            background: #fff5e0;
+            color: #d48806;
+        }
+
+        .status-badge.shipped {
+            background: #e8f0ff;
+            color: #2563eb;
+        }
+
+        .status-badge.cancelled {
+            background: #fff0f0;
+            color: #e53e3e;
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .actions-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .act-btn {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 7px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #555;
+            transition: all .2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .act-btn:hover {
+            border-color: #aaa;
+            color: #111;
+        }
+
+        .act-btn svg {
+            width: 13px;
+            height: 13px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .act-btn.view {
+            color: #2563eb;
+            border-color: #bfdbfe;
+        }
+
+        .act-btn.view:hover {
+            background: #eff6ff;
+        }
+
+        .act-btn.delete {
+            color: #e53e3e;
+            border-color: #fecaca;
+        }
+
+        .act-btn.delete:hover {
+            background: #fff5f5;
+        }
+
+        .status-select {
+            padding: 6px 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 7px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #555;
+            background: #fff;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .status-select:focus {
+            border-color: #aaa;
+        }
+
+        .chevron-btn {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 7px;
+            padding: 6px 8px;
+            cursor: pointer;
+        }
+
+        .chevron-btn svg {
+            width: 12px;
+            height: 12px;
+            stroke: #888;
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Analytics section */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-box {
+            background: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 24px;
+            transition: transform .25s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-box .s-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        .stat-box .s-val {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #111;
+        }
+
+        .stat-box .s-sub {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        /* Customers / Inventory / Settings placeholder */
+        .placeholder {
+            text-align: center;
+            padding: 80px 20px;
+            color: #aaa;
+        }
+
+        .placeholder h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        /* Order detail modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .35);
+            z-index: 300;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 14px;
+            width: 480px;
+            max-width: 95vw;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
+        }
+
+        .modal-head {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-head h3 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f7f7f7;
+            font-size: 0.87rem;
+        }
+
+        .modal-row:last-child {
+            border-bottom: none;
+        }
+
+        .modal-row .key {
+            color: #888;
+        }
+
+        .modal-row .val {
+            font-weight: 600;
+            color: #111;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <span class="brand">AMALL<span class="admin-badge">ADMIN</span></span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="active" onclick="showSection('analytics',this)">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>Analytics
+            </a>
+            <a href="#" onclick="showSection('products',this)">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+                </svg>Products
+            </a>
+            <a href="#" onclick="showSection('orders',this)">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 11l3 3L22 4" />
+                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                </svg>Orders
+            </a>
+            <a href="#" onclick="showSection('customers',this)">
+                <svg viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                </svg>Customers
+            </a>
+            <a href="#" onclick="showSection('inventory',this)">
+                <svg viewBox="0 0 24 24">
+                    <rect x="2" y="7" width="20" height="14" rx="2" />
+                    <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+                </svg>Inventory
+            </a>
+            <a href="#" onclick="showSection('settings',this)">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+                </svg>Settings
+            </a>
+        </nav>
+        <div class="sidebar-signout">
+            <a href="login.html" id="logoutLink">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
+                </svg>SIGN OUT
+            </a>
+        </div>
+    </aside>
+
+    <!-- ── MAIN AREA ── -->
+    <div class="main-area">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="search-wrap">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" placeholder="Search archives…" id="globalSearch">
+            </div>
+            <div class="topbar-actions">
+                <button class="notif-btn" id="notifToggle">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 01-3.46 0" />
+                    </svg>
+                    <span class="notif-badge" id="notifCount">2</span>
+                </button>
+                <div class="admin-profile">
+                    <div class="info">
+                        <div class="name" id="adminName">ADMIN</div>
+                        <div class="email" id="adminEmail">admin@parfumes.com</div>
+                    </div>
+                    <div class="admin-avatar" id="adminAvatar">A</div>
+                </div>
+            </div>
+            <!-- Notifications panel -->
+            <div class="notif-panel" id="notifPanel">
+                <div class="notif-header">
+                    <h4>NOTIFICATIONS</h4>
+                    <span id="notifSummary">2 unread · 2 total</span>
+                    <button class="notif-close" id="notifClose">✕</button>
+                </div>
+                <div id="notifList">
+                    <div class="notif-item" id="n1">
+                        <div class="notif-dot"><svg viewBox="0 0 24 24">
+                                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6z" />
+                                <line x1="3.8" y1="6" x2="20.2" y2="6" />
+                            </svg></div>
+                        <div class="notif-info">
+                            <div class="title">ORDER #AM-0031</div>
+                            <div class="desc">New order from Fatima Zahra · 180 DH</div>
+                            <div class="time">Today, 3:15 PM</div>
+                        </div>
+                        <button class="notif-remove" onclick="removeNotif('n1')">✕</button>
+                    </div>
+                    <div class="notif-item" id="n2">
+                        <div class="notif-dot"><svg viewBox="0 0 24 24">
+                                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6z" />
+                                <line x1="3.8" y1="6" x2="20.2" y2="6" />
+                            </svg></div>
+                        <div class="notif-info">
+                            <div class="title">ORDER #AM-0028</div>
+                            <div class="desc">New order from Akram Zekri · 400 DH</div>
+                            <div class="time">Today, 3:07 PM</div>
+                        </div>
+                        <button class="notif-remove" onclick="removeNotif('n2')">✕</button>
+                    </div>
+                </div>
+                <div class="notif-footer">
+                    <button class="btn-refresh" onclick="refreshNotifs()">REFRESH</button>
+                    <button class="btn-clearall" onclick="clearAllNotifs()">CLEAR ALL</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- PAGE CONTENT -->
+        <div class="page-content">
+
+            <!-- ANALYTICS -->
+            <div class="section active" id="section-analytics">
+                <div class="page-heading">
+                    <h1>Analytics</h1>
+                    <p>Store performance overview</p>
+                </div>
+                <div style="margin-top:28px;" class="analytics-grid">
+                    <div class="stat-box">
+                        <div class="s-label">Total Orders</div>
+                        <div class="s-val">3</div>
+                        <div class="s-sub">All time</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="s-label">Total Revenue</div>
+                        <div class="s-val">595 DH</div>
+                        <div class="s-sub">All time</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="s-label">Customers</div>
+                        <div class="s-val">2</div>
+                        <div class="s-sub">Registered</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="s-label">Products</div>
+                        <div class="s-val">3</div>
+                        <div class="s-sub">In catalog</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORDERS -->
+            <div class="section" id="section-orders">
+                <div class="page-heading">
+                    <h1>Order Manifest</h1>
+                    <p id="ordersSubtitle">3 TOTAL ORDERS PROCESSED</p>
+                </div>
+                <div class="orders-toolbar">
+                    <div class="orders-search">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                        <input type="text" placeholder="Search orders by name, ID, or phone…" id="ordersSearch"
+                            oninput="filterOrders()">
+                    </div>
+                    <button class="refresh-btn" onclick="renderOrders()">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="23 4 23 10 17 10" />
+                            <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" />
+                        </svg>Refresh
+                    </button>
+                </div>
+                <div class="filter-row">
+                    <select id="statusFilter" onchange="filterOrders()">
+                        <option value="">All Statuses</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="processing">Processing</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="orders-table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PRODUCTS -->
+            <div class="section" id="section-products">
+                <div class="page-heading">
+                    <h1>Products</h1>
+                    <p id="productsSubtitle">3 PRODUCTS IN CATALOG</p>
+                </div>
+
+                <!-- ADD PRODUCT FORM -->
+                <div
+                    style="margin-top:28px;background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:24px 28px;margin-bottom:28px;">
+                    <h3
+                        style="font-size:0.95rem;font-weight:700;color:#111;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;">
+                        ＋ Add New Product
+                    </h3>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:14px;align-items:end;">
+                        <div>
+                            <label
+                                style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Product
+                                Name</label>
+                            <input id="pName" type="text" placeholder="e.g. Rose Noir"
+                                style="width:100%;padding:10px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.85rem;outline:none;color:#333;">
+                        </div>
+                        <div>
+                            <label
+                                style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Price
+                                (DH)</label>
+                            <input id="pPrice" type="number" placeholder="e.g. 200" min="0"
+                                style="width:100%;padding:10px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.85rem;outline:none;color:#333;">
+                        </div>
+                        <div>
+                            <label
+                                style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Stock</label>
+                            <input id="pStock" type="number" placeholder="e.g. 20" min="0"
+                                style="width:100%;padding:10px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.85rem;outline:none;color:#333;">
+                        </div>
+                        <div>
+                            <label
+                                style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Category</label>
+                            <select id="pCategory"
+                                style="width:100%;padding:10px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.85rem;outline:none;color:#333;background:#fff;">
+                                <option value="Floral">Floral</option>
+                                <option value="Woody">Woody</option>
+                                <option value="Oriental">Oriental</option>
+                                <option value="Fresh">Fresh</option>
+                                <option value="Luxury">Luxury</option>
+                            </select>
+                        </div>
+                        <button onclick="addProduct()"
+                            style="padding:10px 20px;background:#111;color:#fff;border:none;border-radius:8px;font-size:0.83rem;font-weight:700;cursor:pointer;white-space:nowrap;letter-spacing:.5px;">Add
+                            Product</button>
+                    </div>
+                    <div style="margin-top:14px;">
+                        <label
+                            style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Description</label>
+                        <input id="pDesc" type="text" placeholder="Short description of the fragrance…"
+                            style="width:100%;padding:10px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.85rem;outline:none;color:#333;">
+                    </div>
+                    <div style="margin-top:14px;">
+                        <label
+                            style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Product
+                            Photo</label>
+                        <label for="pPhoto" style="display:flex;align-items:center;gap:14px;cursor:pointer;">
+                            <div id="pPhotoPreview"
+                                style="width:70px;height:70px;border-radius:10px;border:2px dashed #ddd;background:#f7f8fa;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
+                                <svg style="width:24px;height:24px;stroke:#ccc;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;"
+                                    viewBox="0 0 24 24">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                    <polyline points="21 15 16 10 5 21" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div style="font-size:0.85rem;font-weight:600;color:#333;">Click to upload photo</div>
+                                <div style="font-size:0.75rem;color:#aaa;margin-top:3px;">PNG, JPG, WEBP — max 5MB</div>
+                            </div>
+                        </label>
+                        <input id="pPhoto" type="file" accept="image/*" style="display:none;"
+                            onchange="previewPhoto('pPhoto','pPhotoPreview')">
+                    </div>
+                </div>
+
+                <!-- PRODUCTS TABLE -->
+                <div class="orders-table-wrap">
+                    <div
+                        style="padding:16px 20px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;">
+                        <h3 style="font-size:0.95rem;font-weight:700;color:#111;">All Products</h3>
+                        <div style="position:relative;">
+                            <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:#aaa;fill:none;stroke-width:2;stroke-linecap:round;"
+                                viewBox="0 0 24 24">
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg>
+                            <input type="text" placeholder="Search products…" id="productSearch"
+                                oninput="filterProducts()"
+                                style="padding:8px 12px 8px 32px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.82rem;outline:none;width:200px;color:#333;">
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- EDIT PRODUCT MODAL -->
+            <div class="modal-overlay" id="editProductModal">
+                <div class="modal">
+                    <div class="modal-head">
+                        <h3>Edit Product</h3>
+                        <button class="modal-close"
+                            onclick="document.getElementById('editProductModal').classList.remove('open')">✕</button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="editPId">
+                        <div style="margin-bottom:14px;">
+                            <label
+                                style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Product
+                                Name</label>
+                            <input id="editPName" type="text"
+                                style="width:100%;padding:10px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.87rem;outline:none;color:#333;">
+                        </div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+                            <div>
+                                <label
+                                    style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Price
+                                    (DH)</label>
+                                <input id="editPPrice" type="number"
+                                    style="width:100%;padding:10px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.87rem;outline:none;color:#333;">
+                            </div>
+                            <div>
+                                <label
+                                    style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Stock</label>
+                                <input id="editPStock" type="number"
+                                    style="width:100%;padding:10px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.87rem;outline:none;color:#333;">
+                            </div>
+                        </div>
+                        <div style="margin-bottom:14px;">
+                            <label
+                                style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Category</label>
+                            <select id="editPCategory"
+                                style="width:100%;padding:10px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.87rem;outline:none;color:#333;background:#fff;">
+                                <option>Floral</option>
+                                <option>Woody</option>
+                                <option>Oriental</option>
+                                <option>Fresh</option>
+                                <option>Luxury</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:14px;">
+                            <label
+                                style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Description</label>
+                            <input id="editPDesc" type="text"
+                                style="width:100%;padding:10px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.87rem;outline:none;color:#333;">
+                        </div>
+                        <div style="margin-bottom:20px;">
+                            <label
+                                style="display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.8px;color:#aaa;margin-bottom:6px;">Product
+                                Photo</label>
+                            <label for="editPPhoto" style="display:flex;align-items:center;gap:14px;cursor:pointer;">
+                                <div id="editPPhotoPreview"
+                                    style="width:60px;height:60px;border-radius:8px;border:2px dashed #ddd;background:#f7f8fa;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
+                                    <svg style="width:20px;height:20px;stroke:#ccc;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;"
+                                        viewBox="0 0 24 24">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                                        <circle cx="8.5" cy="8.5" r="1.5" />
+                                        <polyline points="21 15 16 10 5 21" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div style="font-size:0.83rem;font-weight:600;color:#333;">Change photo</div>
+                                    <div style="font-size:0.73rem;color:#aaa;margin-top:3px;">PNG, JPG, WEBP</div>
+                                </div>
+                            </label>
+                            <input id="editPPhoto" type="file" accept="image/*" style="display:none;"
+                                onchange="previewPhoto('editPPhoto','editPPhotoPreview')">
+                        </div>
+                        <button onclick="saveEditProduct()"
+                            style="width:100%;padding:12px;background:#111;color:#fff;border:none;border-radius:8px;font-size:0.87rem;font-weight:700;cursor:pointer;">Save
+                            Changes</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CUSTOMERS -->
+            <div class="section" id="section-customers">
+                <div class="page-heading">
+                    <h1>Customers</h1>
+                    <p>Registered accounts</p>
+                </div>
+                <div style="margin-top:28px;" class="orders-table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Orders</th>
+                                <th>Total Spent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="customer-name">Fatima Zahra</td>
+                                <td>fatima@mail.com</td>
+                                <td>2</td>
+                                <td>375 DH</td>
+                            </tr>
+                            <tr>
+                                <td class="customer-name">Akram Zekri</td>
+                                <td>akram@mail.com</td>
+                                <td>1</td>
+                                <td>220 DH</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- INVENTORY -->
+            <div class="section" id="section-inventory">
+                <div class="page-heading">
+                    <h1>Inventory</h1>
+                    <p>Stock levels</p>
+                </div>
+                <div style="margin-top:28px;" class="orders-table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>SKU</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Midnight Bloom</td>
+                                <td>AM-001</td>
+                                <td>180 DH</td>
+                                <td>24</td>
+                                <td><span class="status-badge delivered">In Stock</span></td>
+                            </tr>
+                            <tr>
+                                <td>Onyx Reserve</td>
+                                <td>AM-002</td>
+                                <td>220 DH</td>
+                                <td>12</td>
+                                <td><span class="status-badge delivered">In Stock</span></td>
+                            </tr>
+                            <tr>
+                                <td>Golden Aurum</td>
+                                <td>AM-003</td>
+                                <td>195 DH</td>
+                                <td>3</td>
+                                <td><span class="status-badge processing">Low Stock</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SETTINGS -->
+            <div class="section" id="section-settings">
+                <div class="page-heading">
+                    <h1>Settings</h1>
+                    <p>Admin account settings</p>
+                </div>
+                <div
+                    style="margin-top:28px;max-width:480px;background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:28px;">
+                    <div style="margin-bottom:18px;"><label
+                            style="display:block;font-size:0.78rem;color:#888;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">Admin
+                            Name</label>
+                        <input type="text" id="s-name"
+                            style="width:100%;padding:10px 14px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.87rem;outline:none;"
+                            value="ADMIN">
+                    </div>
+                    <div style="margin-bottom:18px;"><label
+                            style="display:block;font-size:0.78rem;color:#888;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">Email</label>
+                        <input type="email" id="s-email"
+                            style="width:100%;padding:10px 14px;border:1px solid #e0e0e0;border-radius:8px;font-size:0.87rem;outline:none;"
+                            value="admin@parfumes.com">
+                    </div>
+                    <button onclick="saveSettings()"
+                        style="padding:11px 24px;background:#111;color:#fff;border:none;border-radius:8px;font-size:0.85rem;font-weight:700;cursor:pointer;letter-spacing:.5px;">Save
+                        Changes</button>
+                </div>
+            </div>
+
+        </div><!-- /page-content -->
+    </div><!-- /main-area -->
+
+    <!-- Order Detail Modal -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3 id="modalOrderId">Order Detail</h3>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // ── DATA ──
+        let orders = [
+            { id: '#AM-0031', customer: 'Fatima Zahra', phone: '0661112233', items: 1, total: '180 DH', status: 'delivered', date: '25/02/2026' },
+            { id: '#AM-0028', customer: 'Akram Zekri', phone: '0669187363', items: 2, total: '400 DH', status: 'delivered', date: '25/02/2026' },
+            { id: '#AM-0025', customer: 'Fatima Zahra', phone: '0661112233', items: 1, total: '195 DH', status: 'shipped', date: '24/02/2026' },
+        ];
+
+        // ── SECTION SWITCH ──
+        function showSection(name, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+            document.getElementById('section-' + name).classList.add('active');
+            if (el) el.classList.add('active');
+        }
+
+        // ── RENDER ORDERS ──
+        function getStatusLabel(s) {
+            const map = { delivered: 'Delivered', shipped: 'Shipped', processing: 'Processing', cancelled: 'Cancelled' };
+            return map[s] || s;
+        }
+        function renderOrders(data) {
+            const rows = data || orders;
+            const tbody = document.getElementById('ordersBody');
+            document.getElementById('ordersSubtitle').textContent = rows.length + ' TOTAL ORDERS PROCESSED';
+            tbody.innerHTML = rows.map(o => `
+    <tr>
+      <td><div class="order-id">${o.id}</div><div class="order-date">${o.date}</div></td>
+      <td><div class="customer-name">${o.customer}</div><div class="customer-phone">${o.phone}</div></td>
+      <td>${o.items} Item${o.items !== 1 ? 's' : ''}</td>
+      <td><strong>${o.total}</strong></td>
+      <td><span class="status-badge ${o.status}">${getStatusLabel(o.status)}</span></td>
+      <td>
+        <div class="actions-cell">
+          <button class="act-btn view" onclick="viewOrder('${o.id}')"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <select class="status-select" onchange="changeStatus('${o.id}',this.value)">
+            <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+            <option value="shipped"   ${o.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+            <option value="processing"${o.status === 'processing' ? 'selected' : ''}>Processing</option>
+            <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+          </select>
+          <button class="act-btn" style="color:#555;" onclick="changeStatus('${o.id}',document.querySelector('[onchange*=\\'${o.id}\\']')?.value)"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></button>
+          <button class="act-btn delete" onclick="deleteOrder('${o.id}')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+        }
+
+        function filterOrders() {
+            const q = document.getElementById('ordersSearch').value.toLowerCase();
+            const s = document.getElementById('statusFilter').value;
+            const filtered = orders.filter(o => {
+                const match = o.customer.toLowerCase().includes(q) || o.id.toLowerCase().includes(q) || o.phone.includes(q);
+                return match && (s === '' || o.status === s);
+            });
+            renderOrders(filtered);
+        }
+
+        function changeStatus(id, newStatus) {
+            const o = orders.find(x => x.id === id);
+            if (o && newStatus) { o.status = newStatus; filterOrders(); }
+        }
+
+        function deleteOrder(id) {
+            if (confirm('Delete order ' + id + '?')) { orders = orders.filter(x => x.id !== id); filterOrders(); }
+        }
+
+        function viewOrder(id) {
+            const o = orders.find(x => x.id === id);
+            if (!o) return;
+            document.getElementById('modalOrderId').textContent = 'Order ' + o.id;
+            document.getElementById('modalBody').innerHTML = `
+    <div class="modal-row"><span class="key">Customer</span><span class="val">${o.customer}</span></div>
+    <div class="modal-row"><span class="key">Phone</span><span class="val">${o.phone}</span></div>
+    <div class="modal-row"><span class="key">Items</span><span class="val">${o.items}</span></div>
+    <div class="modal-row"><span class="key">Total</span><span class="val">${o.total}</span></div>
+    <div class="modal-row"><span class="key">Status</span><span class="val">${getStatusLabel(o.status)}</span></div>
+    <div class="modal-row"><span class="key">Date</span><span class="val">${o.date}</span></div>
+  `;
+            document.getElementById('orderModal').classList.add('open');
+        }
+        function closeModal() { document.getElementById('orderModal').classList.remove('open'); }
+
+        // ── NOTIFICATIONS ──
+        document.getElementById('notifToggle').addEventListener('click', () => {
+            document.getElementById('notifPanel').classList.toggle('open');
+        });
+        document.getElementById('notifClose').addEventListener('click', () => {
+            document.getElementById('notifPanel').classList.remove('open');
+        });
+        function updateNotifCount() {
+            const visible = document.querySelectorAll('#notifList .notif-item').length;
+            document.getElementById('notifCount').textContent = visible;
+            document.getElementById('notifSummary').textContent = visible + ' unread · ' + visible + ' total';
+            if (visible === 0) document.getElementById('notifCount').style.display = 'none';
+        }
+        function removeNotif(id) { document.getElementById(id)?.remove(); updateNotifCount(); }
+        function clearAllNotifs() { document.getElementById('notifList').innerHTML = ''; updateNotifCount(); }
+        function refreshNotifs() { alert('Notifications refreshed!'); }
+
+        // ── SETTINGS ──
+        function saveSettings() {
+            const n = document.getElementById('s-name').value.trim();
+            const e = document.getElementById('s-email').value.trim();
+            if (n) { document.getElementById('adminName').textContent = n; document.getElementById('adminAvatar').textContent = n.charAt(0).toUpperCase(); }
+            if (e) document.getElementById('adminEmail').textContent = e;
+            alert('Settings saved!');
+        }
+
+        // ── PRODUCTS ──
+        let products = [
+            { id: 1, name: 'Midnight Bloom', category: 'Floral', price: 180, stock: 24, desc: 'Sophisticated & Mysterious', img: '' },
+            { id: 2, name: 'Onyx Reserve', category: 'Woody', price: 220, stock: 12, desc: 'Intense & Commanding', img: '' },
+            { id: 3, name: 'Golden Aurum', category: 'Oriental', price: 195, stock: 3, desc: 'Warm & Radiant', img: '' },
+        ];
+        let nextPid = 4;
+
+        // ── Photo preview helper ──
+        function previewPhoto(inputId, previewId) {
+            const file = document.getElementById(inputId).files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const div = document.getElementById(previewId);
+                div.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;">';
+                div._dataUrl = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+
+        function renderProducts(data) {
+            const rows = data || products;
+            document.getElementById('productsSubtitle').textContent = rows.length + ' PRODUCTS IN CATALOG';
+            document.getElementById('productsBody').innerHTML = rows.map(p => `
+                <tr>
+                    <td><strong style="color:#111;">${p.name}</strong></td>
+                    <td><span style="background:#f0f0f5;color:#555;font-size:0.73rem;padding:3px 10px;border-radius:20px;font-weight:600;">${p.category}</span></td>
+                    <td><strong>${p.price} DH</strong></td>
+                    <td>${p.stock}</td>
+                    <td><span class="status-badge ${p.stock > 5 ? 'delivered' : p.stock > 0 ? 'processing' : 'cancelled'}">${p.stock > 5 ? 'In Stock' : p.stock > 0 ? 'Low Stock' : 'Out of Stock'}</span></td>
+                    <td style="color:#888;font-size:0.82rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.desc || '—'}</td>
+                    <td>
+                        <div class="actions-cell">
+                            <button class="act-btn view" onclick="openEditProduct(${p.id})">
+                                <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit
+                            </button>
+                            <button class="act-btn delete" onclick="deleteProduct(${p.id})">
+                                <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterProducts() {
+            const q = document.getElementById('productSearch').value.toLowerCase();
+            renderProducts(products.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)));
+        }
+
+        function addProduct() {
+            const name = document.getElementById('pName').value.trim();
+            const price = parseInt(document.getElementById('pPrice').value);
+            const stock = parseInt(document.getElementById('pStock').value);
+            const cat = document.getElementById('pCategory').value;
+            const desc = document.getElementById('pDesc').value.trim();
+            if (!name || isNaN(price) || isNaN(stock)) { alert('Please fill in Name, Price and Stock.'); return; }
+            products.push({ id: nextPid++, name, category: cat, price, stock, desc });
+            document.getElementById('pName').value = '';
+            document.getElementById('pPrice').value = '';
+            document.getElementById('pStock').value = '';
+            document.getElementById('pDesc').value = '';
+            renderProducts();
+        }
+
+        function openEditProduct(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('editPId').value = p.id;
+            document.getElementById('editPName').value = p.name;
+            document.getElementById('editPPrice').value = p.price;
+            document.getElementById('editPStock').value = p.stock;
+            document.getElementById('editPDesc').value = p.desc;
+            document.getElementById('editPCategory').value = p.category;
+            document.getElementById('editProductModal').classList.add('open');
+        }
+
+        function saveEditProduct() {
+            const id = parseInt(document.getElementById('editPId').value);
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            p.name = document.getElementById('editPName').value.trim() || p.name;
+            p.price = parseInt(document.getElementById('editPPrice').value) || p.price;
+            p.stock = parseInt(document.getElementById('editPStock').value);
+            p.category = document.getElementById('editPCategory').value;
+            p.desc = document.getElementById('editPDesc').value.trim();
+            document.getElementById('editProductModal').classList.remove('open');
+            renderProducts();
+        }
+
+        function deleteProduct(id) {
+            if (!confirm('Delete this product?')) return;
+            products = products.filter(x => x.id !== id);
+            renderProducts();
+        }
+
+        // ── INIT ──
+        renderOrders();
+        renderProducts();
+
+        // Load stored user
+        (function () {
+            const nm = localStorage.getItem('dashName');
+            const em = localStorage.getItem('dashEmail');
+            if (nm) { document.getElementById('adminName').textContent = nm.toUpperCase(); document.getElementById('adminAvatar').textContent = nm.charAt(0).toUpperCase(); }
+            if (em) document.getElementById('adminEmail').textContent = em;
+        })();
+
+        document.getElementById('logoutLink').addEventListener('click', () => {
+            localStorage.removeItem('dashName'); localStorage.removeItem('dashEmail');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+
+</html>

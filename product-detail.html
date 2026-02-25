@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | PARFUMES AMALL</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="cart.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="amal.png.png"><a href="INDEX.HTML"><img
+                    src="amal.png.png add telwand for un animation than parfume 3d in intro "
+                    alt="PARFUMES AMALL Logo"></a></div>
+        <nav>
+            <ul>
+                <li><a href="INDEX.HTML#home">Home</a></li>
+                <li><a href="INDEX.HTML#featured">Collection</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="signup.html" class="icon-link" title="Account">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a></li>
+                <li><a href="cart.html" class="icon-link" title="Cart">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6zM3.8 6h16.4M16 10a4 4 0 01-8 0"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span class="cart-count">0</span>
+                    </a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="product-detail-section" id="product-detail-content">
+        <!-- Content rendered by JS -->
+    </section>
+
+    <footer>
+        <div class="amal.png.png"><img src="amal.png.png " alt="AMALL Logo"></div>
+        <div class="socials">
+            <a href="https://www.instagram.com/amaal1____?igsh=MXVvdHpuNndqeDRiNQ==" title="Instagram">
+                <svg viewBox="0 0 24 24">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+            </a>
+            <a href="#" title="Facebook">
+                <svg viewBox="0 0 24 24">
+                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+                </svg>
+            </a>
+            <a href="#" title="Twitter">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" />
+                </svg>
+            </a>
+        </div>
+        <p style="font-size: 0.85rem; color: #888;">&copy; 2026 PARFUMES AMALL. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        let quantity = 1;
+
+        function renderProductDetail() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            const product = products[productId];
+
+            if (!product) {
+                document.getElementById('product-detail-content').innerHTML = `
+                    <div style="text-align: center; grid-column: span 2; padding: 100px;">
+                        <h2>Product Not Found</h2>
+                        <br>
+                        <a href="INDEX.HTML#featured" class="btn">Return to Collection</a>
+                    </div>
+                `;
+                return;
+            }
+
+            document.title = `${product.name} | PARFUMES AMALL`;
+
+            document.getElementById('product-detail-content').innerHTML = `
+                <div class="detail-image-container reveal-active">
+                    <img src="${product.image}" alt="${product.name}" class="detail-image">
+                </div>
+                <div class="detail-info">
+                    <span>The Signature Series</span>
+                    <h1>${product.name}</h1>
+                    <p class="price">$${product.price.toFixed(2)}</p>
+                    <p class="shipping-note">Shipping calculated at checkout.</p>
+
+                    <div class="quantity-selector-wrapper">
+                        <label style="font-size:0.8rem; text-transform:uppercase; letter-spacing:2px; color:#888; margin-bottom:10px; display:block;">Quantity</label>
+                        <div class="quantity-selector">
+                            <button class="qty-minus" onclick="changeQty(-1)">&#8722;</button>
+                            <span class="qty-display" id="qty-display">1</span>
+                            <button class="qty-plus" onclick="changeQty(1)">&#43;</button>
+                        </div>
+                    </div>
+
+                    <div class="detail-actions">
+                        <button class="btn" style="width:100%; text-align:center;" onclick="handleAddToCart(${product.id}, '${product.name}', ${product.price}, '${product.image}')">Add to Cart</button>
+                        <a href="checkout.html" class="btn-buy-now" onclick="handleAddToCart(${product.id}, '${product.name}', ${product.price}, '${product.image}')">
+                            <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;display:inline;vertical-align:middle;margin-right:8px;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6z"/><line x1="3.8" y1="6" x2="20.2" y2="6"/></svg>
+                            BUY NOW
+                        </a>
+                    </div>
+
+                    <p style="margin-top: 20px; font-size: 0.8rem; color: #888;">Complimentary delivery and signature gift wrapping on all orders.</p>
+
+                    <div style="border-top: 1px solid #e5e5e5; margin-top: 40px; padding-top: 30px;">
+                        <p class="detail-description">${product.description}</p>
+                        <div class="perfume-notes">
+                            <div class="note-card">
+                                <h4>Top Notes</h4>
+                                <p>${product.notes.top}</p>
+                            </div>
+                            <div class="note-card">
+                                <h4>Heart Notes</h4>
+                                <p>${product.notes.heart}</p>
+                            </div>
+                            <div class="note-card">
+                                <h4>Base Notes</h4>
+                                <p>${product.notes.base}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function changeQty(delta) {
+            quantity = Math.max(1, quantity + delta);
+            const el = document.getElementById('qty-display');
+            if (el) el.textContent = quantity;
+        }
+
+        function handleAddToCart(id, name, price, image) {
+            for (let i = 0; i < quantity; i++) {
+                addToCart(id, name, price, image);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', renderProductDetail);
+    </script>
+</body>
+
+</html>
